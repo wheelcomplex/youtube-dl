@@ -310,12 +310,16 @@ class YoutubeEntryListBaseInfoExtractor(YoutubeBaseInfoExtractor):
                             continue
                     raise
 
-            content_html = more['content_html']
-            if not content_html.strip():
-                # Some webpages show a "Load more" button but they don't
-                # have more videos
+            # fix KeyError: 'content_html' while download https://www.youtube.com/watch?v=XukO1teJuBg&list=UUW2uLZAkI67PLIwmPF2RIQw
+            if 'content_html' in more:
+                content_html = more['content_html']
+                if not content_html.strip():
+                    # Some webpages show a "Load more" button but they don't
+                    # have more videos
+                    break
+                more_widget_html = more['load_more_widget_html']
+            else:
                 break
-            more_widget_html = more['load_more_widget_html']
 
 
 class YoutubePlaylistBaseInfoExtractor(YoutubeEntryListBaseInfoExtractor):
